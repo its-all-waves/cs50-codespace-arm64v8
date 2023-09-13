@@ -6,5 +6,6 @@
         8080, // http-server
         8082  // phpLiteAdmin
     ],
-    "image": "ghcr.io/cs50/codespace"
+    // "image": "ghcr.io/cs50/codespace"
+    "image": "cs50-codespace-arm64v8_230913"
 }

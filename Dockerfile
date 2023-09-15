@@ -129,6 +129,14 @@ RUN apt update && apt install --no-install-recommends --yes \
         apt clean
 
 
+# Install zsh
+RUN apt install --no-install-recommends --yes \
+    zsh
+
+# Install ohmyzsh
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+
+
 # Install Python packages
 RUN pip3 install --no-cache-dir \
     black \
@@ -140,8 +148,9 @@ RUN pip3 install --no-cache-dir \
 
 
 # Enforce login shell
-RUN echo "shopt -q login_shell || bash --login" >> /home/ubuntu/.bashrc && \
-    chown -R ubuntu:ubuntu /home/ubuntu/.bashrc
+RUN echo "shopt -q login_shell || bash --login" >> /home/ubuntu/.bashrc
+    # Allow user control over .bashrc (comment out line below)
+    # && chown -R ubuntu:ubuntu /home/ubuntu/.bashrc
 
 
 # Copy files to image

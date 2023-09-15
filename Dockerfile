@@ -129,14 +129,6 @@ RUN apt update && apt install --no-install-recommends --yes \
         apt clean
 
 
-# Install zsh
-RUN apt install --no-install-recommends --yes \
-    zsh
-
-# Install ohmyzsh
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
-
-
 # Install Python packages
 RUN pip3 install --no-cache-dir \
     black \
@@ -167,3 +159,10 @@ RUN echo "if [ -z \"\$_PROFILE_D\" ] ; then for i in /etc/profile.d/*.sh; do if 
 
 # Set user
 USER ubuntu
+
+
+# Install zsh
+RUN sudo apt install --no-install-recommends --yes zsh
+
+# Install ohmyzsh
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended

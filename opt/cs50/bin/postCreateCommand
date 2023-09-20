@@ -1,22 +1,12 @@
 #!/bin/bash
 
-# Commented out - removes check for $CODEPSPACE since this won't be defined
-# # If not using Codespaces
-# if [ "$CODESPACES" != "true" ]; then
-#     exit
-# fi
-
 # Temporarily remove ACLs so umask is respected
 # https://github.community/t/bug-umask-does-not-seem-to-be-respected/129638/10
 setfacl --no-mask --recursive --remove-all "/workspaces/$RepositoryName"
 
-# Relocate .ssh to workspace
-if [ ! -L "/home/ubuntu/.ssh" ]; then
-    mkdir --parents "/workspaces/$RepositoryName/.ssh"
-    cp --force ~/.ssh/authorized_keys "/workspaces/$RepositoryName/.ssh/"
-    rm --force --recursive /home/ubuntu/.ssh
-    ln --symbolic "/workspaces/$RepositoryName/.ssh" /home/ubuntu/.ssh
-fi
+# Fix git credentials for the vscode dev container. Env vars come from cs50_devcontainer_user_specific_vars.env
+git config --global user.name "$GIT_NAME"
+git config --global user.email "$GIT_EMAIL"
 
 # Install .gitignore
 cat > "/workspaces/$RepositoryName/.gitignore" <<EOT
@@ -69,13 +59,6 @@ find . -size +100M | cut -c 2- | cat >> .gitignore
 awk '!NF||$1~/^#/ {print; next} {$1=$1} !seen[$0]++' .gitignore > /tmp/.gitignore
 mv -f /tmp/.gitignore .gitignore
 
-# Docker pull cs50/cli in background
-# nohup bash -c "docker pull cs50/cli:amd64-minimized &" > /dev/null 2>&1
-
 unzip /build/glibc-sMfBJT/glibc.tar.gz
 sudo tar --extract --file /build/glibc-sMfBJT/glibc.tar.gz --directory /build/glibc-sMfBJT
 sudo rm --force /build/glibc-sMfBJT/glibc.tar.gz
-
-# Fix git credentials for the vscode dev container
-git config --global user.name "$GIT_NAME"
-git config --global user.email "$GIT_EMAIL"
